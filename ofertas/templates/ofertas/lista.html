@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Ofertas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .product-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+        }
+        .product-image {
+            max-width: 100%;
+            height: auto;
+        }
+        .filter-options {
+            margin-bottom: 20px;
+        }
+        .filter-options input {
+            margin-right: 10px;
+        }
+        .label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: yellow;
+            padding: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Catálogo de Ofertas</h1>
+    <div class="filter-options">
+        <form method="get" action=".">
+            <label>
+                <input type="checkbox" name="frete_gratis" value="true" {% if request.GET.frete_gratis == 'true' %}checked{% endif %}>
+                Frete Grátis
+            </label>
+            <label>
+                <input type="checkbox" name="full" value="true" {% if request.GET.full == 'true' %}checked{% endif %}>
+                Entregue pelo Full
+            </label>
+            <button type="submit">Filtrar</button>
+        </form>
+    </div>
+    <div class="product-list">
+        {% for produto in produtos %}
+        <div class="product-card">
+            {% if produto == menor_preco %}
+            <div class="label">Menor Preço</div>
+            {% elif produto == maior_preco %}
+            <div class="label">Maior Preço</div>
+            {% elif produto == maior_desconto %}
+            <div class="label">Maior Desconto</div>
+            {% endif %}
+            <img 
+                src="{{ produto.imagem }}" 
+                alt="{{ produto.nome }}" 
+                class="product-image"
+            >
+            <h2>{{ produto.nome }}</h2>
+            <p>Preço: R$ {{ produto.preco }}</p>
+            {% if produto.parcelamento %}
+            <p>Parcelamento: {{ produto.parcelamento }}</p>
+            {% endif %}
+            <a href="{{ produto.link }}" target="_blank">Ver Produto</a>
+            {% if produto.preco_sem_desconto %}
+            <p>Preço sem Desconto: R$ {{ produto.preco_sem_desconto }}</p>
+            {% endif %}
+            {% if produto.percentual_desconto %}
+            <p>Desconto: {{ produto.percentual_desconto }}</p>
+            {% endif %}
+            <p>Entrega: {{ produto.tipo_entrega }}</p>
+            <p>Frete Grátis: 
+                {% if produto.frete_gratis %}Sim{% else %}Não{% endif %}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
