@@ -1,0 +1,8 @@
+Django>=4.2.0
+selenium>=4.9.0
+webdriver-manager>=3.8.6
+decimal-utils>=0.1
+
+django-crispy-forms>=2.0
+Pillow>=9.5.0
+python-dotenv>=1.0.0
